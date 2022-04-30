@@ -9,32 +9,32 @@ import java.util.Random;
 
 public class Client {
 
-    public final static int SOCKET_PORT = 13267;      // you may change this
-    public final static String SERVER = "127.0.0.1";  // localhost
+    public final static int SOCKET_PORT = 13267;      // you may change this, it represent the Port Number
+    public final static String SERVER = "127.0.0.1";  // put server's IP address here!
     public final static int[] sizes = {10, 100, 1000, 10000};
-    // different name because i don't want to
-    // overwrite the one used by server...
 
-    public final static int FILE_SIZE = 6022386; // file size temporary hard coded
-    // should bigger than the file to be downloaded
 
     public static void main (String [] args ) throws IOException {
-        int bytesRead;
-        int current = 0;
-        Socket clientSocket = null;
-        int [] arrayToPass;
+
+        Socket clientSocket = null;//Socket used to communicate with the server
+        int [] arrayToPass;//Array to send to the server
         try {
-            clientSocket = new Socket(SERVER,SOCKET_PORT);
-            DataOutputStream outClient = new DataOutputStream(clientSocket.getOutputStream());
-            DataInputStream inClient = new DataInputStream(clientSocket.getInputStream());
+            clientSocket = new Socket(SERVER,SOCKET_PORT);//Trying connection to server
+            DataOutputStream outClient = new DataOutputStream(clientSocket.getOutputStream());//Collecting OutputStream to write to Server
+            DataInputStream inClient = new DataInputStream(clientSocket.getInputStream());//Collecting InputStream to receive input from Server
             System.out.println("Connecting...");
 
             //for (int size: sizes) { tried  a single size=10 first value of sizes
                 //for (int i = 0; i < 2; i++) {
-                        long start = System.nanoTime();
+                        long start = System.nanoTime();//Start time before array generation
+            //Array generation, a value of 1 as the second parameter generates an array with values from 0 to the first parameter randomly
+            // a value different from 1 as the second parameter generates an array with values from - first parameter divided by 2 to first parameter divided by 2
                         arrayToPass = createArray(sizes[3],(2));
-                    System.out.println("Time to generate array: " + (System.nanoTime() - start)+" nS");
+                        long end = System.nanoTime();
+                    System.out.println("Time position after generation of array: " + end + " nS");
+                    System.out.println("Time to generate array: " + (end - start)+" nS");// Displays time needed to generate the array
                         //if(size==10){ No ned to check now
+                            //The block 36 to 40 displays the generated array
                             System.out.print("Array:[ ");
                             for (int val:arrayToPass) {
                                 System.out.print(val  + " ");
@@ -44,7 +44,7 @@ public class Client {
                         //outClient.write(intArrayToByteArray(arrayToPass,size)); Old version
                     outClient.writeInt(sizes[3]);//send size of array first
 
-                    sendArray(arrayToPass,outClient);
+                    sendArray(arrayToPass,outClient);//send Array to server
                 //}
             //}
 
